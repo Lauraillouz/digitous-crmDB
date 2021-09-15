@@ -4,17 +4,27 @@ const User = require("../models/userModel");
 const getContacts = async (req, res) => {
   const { email } = req.body;
 
-  const user = await User.findOne({ email });
-  const userId = user._id;
+  try {
+    const user = await User.findOne({ email });
+    const userId = user._id;
 
-  const contacts = await Contact.find({ userId });
-  const numberOfContacts = contacts.length;
+    const contacts = await Contact.find({ userId });
+    const numberOfContacts = contacts.length;
 
-  if (user) {
-    res.status(202).json({
-      message: "Access granted",
-      data: contacts,
-      nb: numberOfContacts,
+    if (user) {
+      res.status(202).json({
+        message: "Access granted",
+        data: contacts,
+        nb: numberOfContacts,
+      });
+    } else {
+      res.status(403).json({
+        message: "Access denied",
+      });
+    }
+  } catch (err) {
+    res.status(404).json({
+      message: err,
     });
   }
 };
@@ -36,10 +46,51 @@ const newContact = async (req, res) => {
         message: err,
       });
     }
+  } else {
+    res.status(403).json({
+      message: "This user already exists",
+    });
   }
 };
 
-const modifyContact = () => {};
+const modifyContact = async (req, res) => {
+  const { email } = req.body;
+  const infoToChange = req.query;
+
+  try {
+    const contact = await Contact.findOne({ email });
+    const contactId = contact._id;
+
+    // Get which info to update
+    const contactKeys = Object.keys(infoToChange);
+
+    // Update info dynamically
+    if (contact) {
+      contactKeys.map(async (key) => {
+        const updatedContact = await Contact.updateOne(
+          { _id: contactId },
+          { [key]: infoToChange[key] }
+        );
+        return updatedContact;
+      });
+      const freshContact = await Contact.findOne({ _id: contactId });
+
+      // Return info to front
+      res.status(202).json({
+        message: "Contact successfully updated",
+        data: freshContact,
+      });
+    } else {
+      res.status(404).json({
+        message: "Something went wrong",
+      });
+    }
+  } catch (err) {
+    res.status(404).json({
+      message: err,
+    });
+  }
+};
 
 const deleteContacts = () => {};
 
