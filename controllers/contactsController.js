@@ -12,13 +12,13 @@ const getContacts = async (req, res) => {
     const numberOfContacts = contacts.length;
 
     if (user) {
-      res.status(202).json({
+      return res.status(202).json({
         message: "Access granted",
         data: contacts,
         nb: numberOfContacts,
       });
     } else {
-      res.status(403).json({
+      return res.status(403).json({
         message: "Access denied",
       });
     }
@@ -76,12 +76,12 @@ const modifyContact = async (req, res) => {
       const freshContact = await Contact.findOne({ _id: contactId });
 
       // Return info to front
-      res.status(202).json({
+      return res.status(202).json({
         message: "Contact successfully updated",
         data: freshContact,
       });
     } else {
-      res.status(404).json({
+      return res.status(404).json({
         message: "Something went wrong",
       });
     }
@@ -92,6 +92,35 @@ const modifyContact = async (req, res) => {
   }
 };
 
-const deleteContacts = () => {};
+const deleteContact = async (req, res) => {
+  const { email } = req.body;
 
-module.exports = { getContacts, newContact, modifyContact, deleteContacts };
+  const contact = await Contact.findOne({ email });
+
+  if (contact) {
+    try {
+      // Find contact's user
+      const user = await User.find({ _id: contact.userId });
+      // Delete contact
+      await Contact.deleteOne({ email });
+      // Show nex list of contacts updated
+      const newContacts = await Contact.find({
+        userId: user[0]._id.toString(),
+      });
+      res.status(202).json({
+        message: "Contact has been successfully deleted",
+        data: newContacts,
+      });
+    } catch (err) {
+      res.status(403).json({
+        message: err,
+      });
+    }
+  } else {
+    res.status(404).json({
+      message: "This contact does not exist",
+    });
+  }
+};
+
+module.exports = { getContacts, newContact, modifyContact, deleteContact };

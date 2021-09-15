@@ -11,6 +11,6 @@ const contactsController = require("../controllers/contactsController");
 router.get("/", protectData, contactsController.getContacts);
 router.post("/", protectData, contactsController.newContact);
 router.put("/", protectData, contactsController.modifyContact);
-router.delete("/", protectData, contactsController.deleteContacts);
+router.delete("/", protectData, contactsController.deleteContact);
 
 module.exports = router;
