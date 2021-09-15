@@ -3,15 +3,36 @@ const User = require("../models/userModel");
 
 const getContacts = async (req, res) => {
   const { email } = req.body;
+  const query = req.query;
+  console.log("query is", query);
+  const queryKey = Object.keys(query);
+  console.log("queryKey is", queryKey);
 
   try {
     const user = await User.findOne({ email });
     const userId = user._id;
 
     const contacts = await Contact.find({ userId });
+
+    const selectedContacts = contacts.find((contact) => {
+      if (queryKey[0] === "category") {
+        return contact[queryKey[0]] === parseInt(query[queryKey[0]]);
+      } else {
+        return (
+          contact[queryKey[0]].toLowerCase().replace(" ", "") ===
+          query[queryKey[0]].toLowerCase().replace(" ", "")
+        );
+      }
+    });
+
     const numberOfContacts = contacts.length;
 
-    if (user) {
+    if (user && query) {
+      return res.status(202).json({
+        message: "Found something!",
+        data: selectedContacts,
+      });
+    } else if (user && !query) {
       return res.status(202).json({
         message: "Access granted",
         data: contacts,
