@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 dotenv.config({
   path: "./config.env",
@@ -22,6 +23,7 @@ const contactsRouter = require("./routers/contactsRouter");
 // Middlewares
 app.use(express.json());
 app.use(morgan("tiny"));
+app.use(cookieParser());
 
 // Routes
 app.use("/register", registerRouter);
