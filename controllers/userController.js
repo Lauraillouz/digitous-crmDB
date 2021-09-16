@@ -67,4 +67,11 @@ const getToken = async (req, res) => {
   });
 };
 
-module.exports = { newUser, getToken };
+const killCookie = (_req, res) => {
+  res.clearCookie("jwt");
+  res.status(202).json({
+    message: "You have been successfully logged out",
+  });
+};
+
+module.exports = { newUser, getToken, killCookie };
