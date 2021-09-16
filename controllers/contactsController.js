@@ -4,9 +4,7 @@ const User = require("../models/userModel");
 const getContacts = async (req, res) => {
   const { email } = req.body;
   const query = req.query;
-  console.log("query is", query);
   const queryKey = Object.keys(query);
-  console.log("queryKey is", queryKey);
 
   try {
     const user = await User.findOne({ email });
@@ -14,33 +12,34 @@ const getContacts = async (req, res) => {
 
     const contacts = await Contact.find({ userId });
 
-    const selectedContacts = contacts.find((contact) => {
-      if (queryKey[0] === "category") {
-        return contact[queryKey[0]] === parseInt(query[queryKey[0]]);
-      } else {
-        return (
-          contact[queryKey[0]].toLowerCase().replace(" ", "") ===
-          query[queryKey[0]].toLowerCase().replace(" ", "")
-        );
-      }
-    });
-
     const numberOfContacts = contacts.length;
 
-    if (user && query) {
-      return res.status(202).json({
-        message: "Found something!",
-        data: selectedContacts,
+    if (queryKey.length !== 0) {
+      const selectedContacts = contacts.find((contact) => {
+        if (queryKey[0] === "category") {
+          return contact[queryKey[0]] === parseInt(query[queryKey[0]]);
+        } else {
+          return (
+            contact[queryKey[0]].toLowerCase().replace(" ", "") ===
+            query[queryKey[0]].toLowerCase().replace(" ", "")
+          );
+        }
       });
-    } else if (user && !query) {
-      return res.status(202).json({
+      if (selectedContacts) {
+        return res.status(202).json({
+          message: "Found something!",
+          data: selectedContacts,
+        });
+      } else {
+        return res.status(400).json({
+          message: "Something went wrong. Please enter a valid contact name",
+        });
+      }
+    } else if (queryKey.length === 0) {
+      res.status(202).json({
         message: "Access granted",
         data: contacts,
         nb: numberOfContacts,
-      });
-    } else {
-      return res.status(403).json({
-        message: "Access denied",
       });
     }
   } catch (err) {
