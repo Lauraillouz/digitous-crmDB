@@ -2,10 +2,8 @@ const User = require("../models/userModel");
 const Contact = require("../models/contactModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv");
-dotenv.config({
-  path: "../config.env",
-});
+
+const killCookie = require("../utils/killCookie");
 
 const passwordSchema = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
 
@@ -76,10 +74,10 @@ const getToken = async (req, res) => {
   }
 };
 
-const killCookie = (_req, res) => {
-  res.clearCookie("jwt");
-  res.status(202).json({
-    message: "You have been successfully logged out",
+const logout = (_req, res) => {
+  killCookie(res);
+  res.status(200).json({
+    message: "You have been logged out",
   });
 };
 
@@ -108,4 +106,4 @@ const deleterUser = async (req, res) => {
   }
 };
 
-module.exports = { newUser, getToken, killCookie, deleterUser };
+module.exports = { newUser, getToken, logout, deleterUser };

@@ -5,6 +5,6 @@ const router = express.Router();
 const userController = require("../controllers/userController");
 
 router.post("/", userController.getToken);
-router.delete("/", userController.killCookie);
+router.delete("/", userController.logout);
 
 module.exports = router;

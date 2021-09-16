@@ -7,6 +7,13 @@ dotenv.config({
   path: "./config.env",
 });
 const mongoose = require("mongoose");
+
+// Routers
+const registerRouter = require("./routers/registerRouter");
+const loginRouter = require("./routers/loginRouter");
+const contactsRouter = require("./routers/contactsRouter");
+const adminRouter = require("./routers/adminRouter");
+
 mongoose
   .connect(process.env.DB, {
     useNewUrlParser: true,
@@ -14,12 +21,6 @@ mongoose
   .then(() => {
     console.log("Connected to mongoDB");
   });
-
-// Routers
-const registerRouter = require("./routers/registerRouter");
-const loginRouter = require("./routers/loginRouter");
-const contactsRouter = require("./routers/contactsRouter");
-const adminRouter = require("./routers/adminRouter");
 
 // Middlewares
 app.use(express.json());

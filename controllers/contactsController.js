@@ -43,6 +43,7 @@ const getContacts = async (req, res) => {
       });
     }
   } catch (err) {
+    console.log("controller err");
     res.status(404).json({
       message: err,
     });
