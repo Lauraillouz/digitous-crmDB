@@ -1,4 +1,5 @@
 const User = require("../models/userModel");
+const Contact = require("../models/contactModel");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
@@ -60,11 +61,19 @@ const getToken = async (req, res) => {
   }
 
   // Create token and give cookie
-  const token = jwt.sign({ id: user._id }, process.env.JWT_SECURE);
-  res.cookie("jwt", token, { httpOnly: true, secure: false });
-  res.status(200).json({
-    message: "Here is your delicious cookie!",
-  });
+  try {
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECURE, {
+      expiresIn: "7d",
+    });
+    res.cookie("jwt", token, { httpOnly: true, secure: false });
+    res.status(200).json({
+      message: "Here is your delicious cookie!",
+    });
+  } catch (err) {
+    res.status(400).json({
+      message: err,
+    });
+  }
 };
 
 const killCookie = (_req, res) => {
@@ -78,12 +87,14 @@ const deleterUser = async (req, res) => {
   const { email } = req.body;
 
   const user = await User.findOne({ email });
+  const userId = user._id;
 
   if (user && user.category !== "admin") {
     try {
       await User.deleteOne({ email });
+      await Contact.deleteMany({ userId });
       res.status(202).json({
-        message: "This user has successfully been deleted",
+        message: "This user and its contacts has successfully been deleted",
       });
     } catch (err) {
       res.status(400).json({
