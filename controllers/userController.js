@@ -74,4 +74,27 @@ const killCookie = (_req, res) => {
   });
 };
 
-module.exports = { newUser, getToken, killCookie };
+const deleterUser = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (user && user.category !== "admin") {
+    try {
+      await User.deleteOne({ email });
+      res.status(202).json({
+        message: "This user has successfully been deleted",
+      });
+    } catch (err) {
+      res.status(400).json({
+        messafe: err,
+      });
+    }
+  } else {
+    res.status(403).json({
+      message: "This user is also an admin. You cannot delete their profile.",
+    });
+  }
+};
+
+module.exports = { newUser, getToken, killCookie, deleterUser };

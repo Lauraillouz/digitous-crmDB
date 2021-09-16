@@ -10,6 +10,7 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  category: String,
 });
 
 const User = mongoose.model("User", UserSchema);

@@ -19,6 +19,7 @@ mongoose
 const registerRouter = require("./routers/registerRouter");
 const loginRouter = require("./routers/loginRouter");
 const contactsRouter = require("./routers/contactsRouter");
+const adminRouter = require("./routers/adminRouter");
 
 // Middlewares
 app.use(express.json());
@@ -29,6 +30,7 @@ app.use(cookieParser());
 app.use("/register", registerRouter);
 app.use("/login", loginRouter);
 app.use("/contacts", contactsRouter);
+app.use("/admin", adminRouter);
 
 // SERVER ON
 app.listen(process.env.PORT, () => {
