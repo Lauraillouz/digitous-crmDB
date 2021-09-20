@@ -19,7 +19,6 @@ const ContactSchema = mongoose.Schema({
   },
   category: {
     type: Number,
-    required: true,
   },
 });
 
