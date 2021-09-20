@@ -1,5 +1,6 @@
 const User = require("../models/userModel");
 const Contact = require("../models/contactModel");
+const bcrypt = require("bcrypt");
 
 const killCookie = require("../utils/killCookie");
 
