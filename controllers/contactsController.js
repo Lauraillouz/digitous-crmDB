@@ -51,7 +51,7 @@ const getContacts = async (req, res) => {
 
 const newContact = async (req, res) => {
   const contactInfo = req.body;
-  const data = req.cookies.jwt;
+  const data = req.cookies;
   console.log("data is", data);
   const contact = await Contact.findOne({ email: contactInfo.email });
 
