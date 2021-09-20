@@ -58,6 +58,7 @@ const newContact = async (req, res) => {
   if (!contact) {
     try {
       const newContact = await Contact.create({
+        userId: data.id,
         name: contactInfo.name,
         email: contactInfo.email,
         description: contactInfo.description,
