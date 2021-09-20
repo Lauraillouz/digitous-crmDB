@@ -2,13 +2,14 @@ const Contact = require("../models/contactModel");
 const User = require("../models/userModel");
 
 const getContacts = async (req, res) => {
-  const { email } = req.body;
+  const data = req.cookies.jwtData;
   const query = req.query;
   const queryKey = Object.keys(query);
 
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ _id: data.id });
     const userId = user._id;
+    console.log(user);
 
     const contacts = await Contact.find({ userId });
 
@@ -36,11 +37,12 @@ const getContacts = async (req, res) => {
         });
       }
     } else if (queryKey.length === 0) {
-      res.status(202).json({
+      return res.status(202).json({
         message: "Access granted",
         data: contacts,
         nb: numberOfContacts,
       });
+    } else if (user) {
     }
   } catch (err) {
     res.status(404).json({
