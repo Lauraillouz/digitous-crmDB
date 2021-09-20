@@ -3,6 +3,8 @@ import { Link } from "react-router-dom";
 // Context
 import { UserContext } from "../App";
 
+const passwordSchema = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+
 const Register = () => {
   const { email, setEmail, password, setPassword } = useContext(UserContext);
 
@@ -16,15 +18,22 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const isPassWordValid = passwordSchema.test(password);
 
-    fetch("https://blooming-retreat-37691.herokuapp.com/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
-    });
+    if (isPassWordValid) {
+      fetch("https://blooming-retreat-37691.herokuapp.com/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          console.log(res);
+        });
+    }
   };
 
   return (
