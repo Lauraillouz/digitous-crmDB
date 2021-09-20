@@ -51,13 +51,14 @@ const getContacts = async (req, res) => {
 
 const newContact = async (req, res) => {
   const contactInfo = req.body;
-  const userId = req.cookies.jwtData;
+  const data = req.cookies.jwtData;
+
   const contact = await Contact.findOne({ email: contactInfo.email });
 
   if (!contact) {
     try {
       const newContact = await Contact.create({
-        userId,
+        userId: data.id,
         name: contactInfo.name,
         email: contactInfo.email,
         description: contactInfo.description,
