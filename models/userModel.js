@@ -10,7 +10,10 @@ const UserSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  category: String,
+  category: {
+    type: String,
+    default: "user",
+  },
 });
 
 const User = mongoose.model("User", UserSchema);
