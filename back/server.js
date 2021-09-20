@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const morgan = require("morgan");
+const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const dotenv = require("dotenv");
 dotenv.config({
@@ -26,6 +27,7 @@ mongoose
 app.use(express.json());
 app.use(morgan("tiny"));
 app.use(cookieParser());
+app.use(cors());
 
 // Home
 app.get("/", (_req, res) => {
