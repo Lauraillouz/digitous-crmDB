@@ -1,7 +1,5 @@
 const User = require("../models/userModel");
 const Contact = require("../models/contactModel");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 
 const killCookie = require("../utils/killCookie");
 
