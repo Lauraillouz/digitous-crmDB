@@ -53,7 +53,7 @@ const newContact = async (req, res) => {
   const contactInfo = req.body;
   const data = req.cookies;
   const contact = await Contact.findOne({ email: contactInfo.email });
-  console.log(data.id);
+  console.log(data);
 
   if (!contact) {
     try {
@@ -62,11 +62,6 @@ const newContact = async (req, res) => {
         email: contactInfo.email,
         description: contactInfo.description,
       });
-      newContact = await Contact.updateOne(
-        { email: contactInfo },
-        { $addToSet: { userId: data.id } }
-      );
-      console.log(newContact);
       return res.status(201).json({
         message: "New contact has successfully been created",
         data: newContact,
