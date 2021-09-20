@@ -52,12 +52,20 @@ const getContacts = async (req, res) => {
 
 const newContact = async (req, res) => {
   const contactInfo = req.body;
-
+  const data = req.cookies.jwt;
+  console.log(data);
   const contact = await Contact.findOne({ email: contactInfo.email });
 
   if (!contact) {
     try {
-      const newContact = await Contact.create(contactInfo);
+      const user = await User.findOne({ _id: data.id });
+      console.log(user);
+      const newContact = await Contact.create({
+        userId: user._id,
+        name: contactInfo.name,
+        email: contactInfo.email,
+        description: contactInfo.description,
+      });
       return res.status(201).json({
         message: "New contact has successfully been created",
         data: newContact,
@@ -69,7 +77,7 @@ const newContact = async (req, res) => {
     }
   } else {
     res.status(403).json({
-      message: "This user already exists",
+      message: "This contact already exists",
     });
   }
 };

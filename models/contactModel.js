@@ -5,13 +5,22 @@ const ContactSchema = mongoose.Schema({
     type: mongoose.Types.ObjectId,
     ref: "User",
   },
-  name: String,
+  name: {
+    type: String,
+    required: true,
+  },
   email: {
     type: String,
     unique: true,
   },
-  description: String,
-  category: Number,
+  description: {
+    type: String,
+    required: true,
+  },
+  category: {
+    type: Number,
+    required: true,
+  },
 });
 
 const Contact = mongoose.model("Contact", ContactSchema);
