@@ -27,7 +27,7 @@ const getContacts = async (req, res) => {
         }
       });
       if (selectedContacts) {
-        return res.status(202).json({
+        return res.status(200).json({
           message: "Found something!",
           data: selectedContacts,
         });
@@ -37,7 +37,7 @@ const getContacts = async (req, res) => {
         });
       }
     } else if (queryKey.length === 0) {
-      return res.status(202).json({
+      return res.status(200).json({
         message: "Access granted",
         data: contacts,
         nb: numberOfContacts,
@@ -104,7 +104,7 @@ const modifyContact = async (req, res) => {
       const freshContact = await Contact.findOne({ _id: contactId });
 
       // Return info to front
-      return res.status(202).json({
+      return res.status(200).json({
         message: "Contact successfully updated",
         data: freshContact,
       });
@@ -135,7 +135,7 @@ const deleteContact = async (req, res) => {
       const newContacts = await Contact.find({
         userId: user[0]._id.toString(),
       });
-      res.status(202).json({
+      res.status(200).json({
         message: "Contact has been successfully deleted",
         data: newContacts,
       });

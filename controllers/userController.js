@@ -91,7 +91,7 @@ const deleterUser = async (req, res) => {
     try {
       await User.deleteOne({ email });
       await Contact.deleteMany({ userId });
-      res.status(202).json({
+      res.status(200).json({
         message: "This user and its contacts has successfully been deleted",
       });
     } catch (err) {
