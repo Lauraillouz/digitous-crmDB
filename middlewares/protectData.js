@@ -11,7 +11,6 @@ const protectData = async (req, res, next) => {
   try {
     const data = jwt.verify(req.cookies.jwt, process.env.JWT_SECURE);
     req.cookies.jwtData = data;
-    console.log(data);
 
     if (Date.now() === data.exp * 1000) {
       killCookie(res);

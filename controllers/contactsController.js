@@ -43,7 +43,6 @@ const getContacts = async (req, res) => {
       });
     }
   } catch (err) {
-    console.log("controller err");
     res.status(404).json({
       message: err,
     });
@@ -53,15 +52,13 @@ const getContacts = async (req, res) => {
 const newContact = async (req, res) => {
   const contactInfo = req.body;
   const data = req.cookies.jwt;
-  console.log(data);
+  console.log("data is", data);
   const contact = await Contact.findOne({ email: contactInfo.email });
 
   if (!contact) {
     try {
-      const user = await User.findOne({ _id: data.id });
-      console.log(user);
       const newContact = await Contact.create({
-        userId: user._id,
+        userId: data.id,
         name: contactInfo.name,
         email: contactInfo.email,
         description: contactInfo.description,
