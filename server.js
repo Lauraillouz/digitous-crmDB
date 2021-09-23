@@ -26,7 +26,7 @@ mongoose
 // Middlewares
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use(cookieParser());
+app.use(cookieParser(config.cookiesKey));
 app.use(cors());
 
 // Home

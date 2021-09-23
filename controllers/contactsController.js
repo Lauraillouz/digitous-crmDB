@@ -36,14 +36,13 @@ const getContacts = async (req, res) => {
           message: "Something went wrong. Please enter a valid contact name",
         });
       }
-    } else if (queryKey.length === 0) {
-      return res.status(200).json({
-        message: "Access granted",
-        data: contacts,
-        nb: numberOfContacts,
-      });
-    } else if (user) {
     }
+
+    return res.status(200).json({
+      message: "Access granted",
+      data: contacts,
+      nb: numberOfContacts,
+    });
   } catch (err) {
     res.status(404).json({
       message: err,

@@ -1,5 +1,4 @@
 const User = require("../models/userModel");
-const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config({
@@ -15,7 +14,7 @@ const protectData = async (req, res, next) => {
     if (Date.now() === data.exp * 1000) {
       killCookie(res);
       return res.status(403).json({
-        message: "Access denied. You token is invalid",
+        message: "Access denied. Your token is invalid",
       });
     }
 
@@ -24,8 +23,7 @@ const protectData = async (req, res, next) => {
       next();
     } else {
       res.status(403).json({
-        message:
-          "Access denied. You cannot access contacts of another user. Please try again with your own ID.",
+        message: "Access denied",
       });
     }
   } catch (err) {

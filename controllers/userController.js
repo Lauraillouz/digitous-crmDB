@@ -40,18 +40,10 @@ const getToken = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-
-  // If user does not exist or error in login
-  if (!user) {
-    return res.status(403).json({
-      message:
-        "Access denied. Please create an account or enter a valid email/password",
-    });
-  }
-
   // Password check
   const isPasswordValid = await bcrypt.compare(password, user.password);
-  if (!isPasswordValid) {
+  // If user does not exist or error in login or password doesn't match
+  if (!user || !isPasswordValid) {
     return res.status(403).json({
       message:
         "Access denied. Please create an account or enter a valid email/password",
@@ -63,7 +55,8 @@ const getToken = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECURE, {
       expiresIn: "7d",
     });
-    res.cookie("jwt", token, { httpOnly: true, secure: false });
+    res.cookie("jwt", token, { signed: true, httpOnly: true, secure: false });
+    res.send(req.signedCookies);
     res.status(200).json({
       message: "Here is your delicious cookie!",
     });
