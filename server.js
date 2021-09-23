@@ -24,10 +24,25 @@ mongoose
   });
 
 // Middlewares
+app.use(
+  cors(/* {
+    origin: "http://localhost:3000",
+    credentials: true,
+  } */)
+);
 app.use(express.json());
 app.use(morgan("tiny"));
-app.use(cookieParser(config.cookiesKey));
-app.use(cors());
+app.use(cookieParser());
+
+app.all("/", (_req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
 
 // Home
 app.get("/", (_req, res) => {
@@ -44,5 +59,5 @@ app.use("/admin", adminRouter);
 
 // SERVER ON
 app.listen(process.env.PORT, () => {
-  console.log("Listening on port 3000");
+  console.log("Listening on port 3001");
 });

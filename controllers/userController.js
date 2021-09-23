@@ -55,8 +55,8 @@ const getToken = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECURE, {
       expiresIn: "7d",
     });
-    res.cookie("jwt", token, { signed: true, httpOnly: true, secure: false });
-    res.send(req.signedCookies);
+    res.cookie("jwt", token, { httpOnly: true, secure: false });
+    /*     res.send(req.signedCookies); */
     res.status(200).json({
       message: "Here is your delicious cookie!",
     });
